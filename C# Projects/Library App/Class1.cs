@@ -14,9 +14,16 @@ namespace Library_App
         
         public Book(string atitle, string acategory, int apageCount)
         {
-            atitle = title;
-            acategory = category;
-            apageCount = pageCount;
+            title = atitle;
+            category = acategory;
+            pageCount = apageCount;
+        }
+
+        public void DisplayBook()
+        {
+            Console.WriteLine(title);
+            Console.WriteLine(category);
+            Console.WriteLine(pageCount);
         }
     }
 }
