@@ -12,11 +12,11 @@ namespace Library_App
             int answerNum;
             int bookCount = 3;
 
-            Book book1 = new Book("Test1", "Action", 243);
-            Book book2 = new Book("Test2", "Adventure", 523);
-            Book book3 = new Book("Test3", "Comedy", 103);
+            Book book1 = new Book("Test1", "Action", 243, false);
+            Book book2 = new Book("Test2", "Adventure", 523, false);
+            Book book3 = new Book("Test3", "Comedy", 103, false);
 
-            Book[] books = { book1, book2, book3 };
+            List<Book> books = new List<Book>{ book1, book2, book3 };
 
             while (state)
             {
@@ -24,7 +24,7 @@ namespace Library_App
                 Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 Console.WriteLine("Please pick from the options below.");
                 Console.WriteLine("1). Check Inventory");
-                Console.WriteLine("2). Enter a new book");
+                Console.WriteLine("2). Book Entry");
                 Console.WriteLine("3). Check out a book");
                 Console.WriteLine();
                 Console.WriteLine("4). Exit");
@@ -40,6 +40,14 @@ namespace Library_App
                     case "Inventory": InventoryCheck(); break;
                     case "Check": InventoryCheck(); break;
                     case "check": InventoryCheck(); break;
+                    case "check inventory": InventoryCheck(); break;
+
+                    // different cases to select book entry
+                    case "2": BookEntry(); break;
+                    case "book entry": BookEntry(); break;
+                    case "Book Entry": BookEntry(); break;
+                    case "book": BookEntry(); break;
+                    case "Book": BookEntry(); break;
                 }
                 
 
@@ -54,7 +62,7 @@ namespace Library_App
 
                 while (state)
                 {
-                    Console.WriteLine("The Library Currently Has " + bookCount + " books in storage");
+                    Console.WriteLine($"The Library Currently Has {bookCount} books in storage");
                     Console.WriteLine("1). Look at Books in Storage");
                     Console.WriteLine("2). Back to Main Menu");
                     Console.WriteLine();
@@ -64,15 +72,19 @@ namespace Library_App
                     if (string.Equals(answer1, "Look at Books in Storage", StringComparison.OrdinalIgnoreCase) || string.Equals(answer1, "Look at Books", StringComparison.OrdinalIgnoreCase) || string.Equals(answer1, "Look", StringComparison.OrdinalIgnoreCase) || answer1 == "1")
                     {
                         Console.Clear();
+
                         foreach(Book book in books)
                         {
-                            Console.WriteLine(book.title);
-                            Console.WriteLine(book.category);
-                            Console.WriteLine(book.pageCount);
+                            Console.WriteLine($"Title: {book.title}");
+                            Console.WriteLine($"Category: {book.category}");
+                            Console.WriteLine($"Page Count: {book.pageCount}");
+                            Console.WriteLine(book.CheckedOutStatus());
                             Console.WriteLine();
                         }
-                        
+
+                        Console.WriteLine("Press Enter to go back.");
                         Console.ReadLine();
+                        Console.Clear();   
                     }
                     else
                     {
@@ -93,6 +105,81 @@ namespace Library_App
 
             void BookEntry()
             {
+                bool state = true;
+                bool state1 = true;
+                string answer2;
+
+                Console.Clear();
+                while (state)
+                {
+                    Console.WriteLine("Please Select an Option");
+                    Console.WriteLine("1). Book Entry");
+                    Console.WriteLine("2). Back to the Main Menu");
+                    Console.WriteLine();
+
+                    answer2 = Console.ReadLine();
+
+                    if (answer2 == "1" || string.Equals(answer2, "Book", StringComparison.OrdinalIgnoreCase) || string.Equals(answer2, "Book Entry", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string titleAnswer;
+                        string categoryAnswer;
+                        int pageAnswer = 1905113515;
+
+                        Console.Write("What is the title of your book?: ");
+                        titleAnswer = Console.ReadLine();
+                        Console.WriteLine(titleAnswer);
+
+                        Console.Write("What is the Genre of your book?: ");
+                        categoryAnswer = Console.ReadLine();
+
+                        while (state1)
+                        {
+                            Console.Write("How many pages does your book have?: ");
+                            
+                            try
+                            {
+                                pageAnswer = Convert.ToInt32(Console.ReadLine());
+                            } 
+                            catch (Exception ex)
+                            {
+                                Console.Clear();
+                                Console.WriteLine();
+                                Console.WriteLine("Invalid Input. Try Again.");
+                                pageAnswer = 1905113515;
+                            }
+
+                            if (pageAnswer == 0)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("You cannot have Zero Pages");
+                            }
+                            else if (pageAnswer < 0)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("You cannot have Negative Pages");                         
+                            }
+                            else if (pageAnswer != 1905113515)
+                            {
+                                state1 = false;
+                            }
+                            Console.ReadLine();
+                        }
+
+                        state1 = true;
+
+                        bookCount++;
+                        string bookName = "book" + Convert.ToString(bookCount);
+                        Book nBook = new Book(titleAnswer, categoryAnswer, pageAnswer, false);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Entry. Try Again");
+                        Console.Clear();
+                    }
+
+                    Console.ReadLine();
+                    Console.Clear();
+                }
 
             }
 

@@ -11,19 +11,26 @@ namespace Library_App
         public string title;
         public string category;
         public int pageCount;
+        public bool isItCheckedOut;
         
-        public Book(string atitle, string acategory, int apageCount)
+        public Book(string atitle, string acategory, int apageCount, bool aisItCheckedOut)
         {
             title = atitle;
             category = acategory;
             pageCount = apageCount;
+            isItCheckedOut = aisItCheckedOut;
         }
 
-        public void DisplayBook()
+        public string CheckedOutStatus()
         {
-            Console.WriteLine(title);
-            Console.WriteLine(category);
-            Console.WriteLine(pageCount);
+            if (isItCheckedOut == true)
+            {
+                return "This Book is Not Available";
+            }
+            else
+            {
+                return "This Book is Available";
+            }
         }
     }
 }
