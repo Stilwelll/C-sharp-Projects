@@ -48,9 +48,11 @@ namespace Library_App
                     case "Book Entry": BookEntry(); break;
                     case "book": BookEntry(); break;
                     case "Book": BookEntry(); break;
+                    case "entry": BookEntry(); break;
+                    case "Entry": BookEntry(); break;
                 }
-                
 
+                Console.Clear();
             }
 
             void InventoryCheck()
@@ -125,12 +127,17 @@ namespace Library_App
                         string categoryAnswer;
                         int pageAnswer = 1905113515;
 
+                        Console.WriteLine();
                         Console.Write("What is the title of your book?: ");
                         titleAnswer = Console.ReadLine();
                         Console.WriteLine(titleAnswer);
+                        
+                        // implement a list of categories that can only be chosen from
 
+                        Console.WriteLine();
                         Console.Write("What is the Genre of your book?: ");
                         categoryAnswer = Console.ReadLine();
+                        Console.WriteLine();
 
                         while (state1)
                         {
@@ -162,14 +169,12 @@ namespace Library_App
                             {
                                 state1 = false;
                             }
-                            Console.ReadLine();
                         }
-
                         state1 = true;
 
                         bookCount++;
-                        string bookName = "book" + Convert.ToString(bookCount);
                         Book nBook = new Book(titleAnswer, categoryAnswer, pageAnswer, false);
+                        books.Add(nBook);
                     }
                     else
                     {
@@ -177,6 +182,11 @@ namespace Library_App
                         Console.Clear();
                     }
 
+                    if (answer2 == "2" || string.Equals(answer2, "Back", StringComparison.OrdinalIgnoreCase))
+                    {
+                        state = false;
+                        Console.WriteLine("Sending you back to the Main Menu. Press Enter to Continue.");
+                    }
                     Console.ReadLine();
                     Console.Clear();
                 }
