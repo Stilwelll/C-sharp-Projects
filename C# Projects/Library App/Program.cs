@@ -25,31 +25,36 @@ namespace Library_App
                 Console.WriteLine("Please pick from the options below.");
                 Console.WriteLine("1). Check Inventory");
                 Console.WriteLine("2). Book Entry");
-                Console.WriteLine("3). Check out a book");
-                Console.WriteLine();
-                Console.WriteLine("4). Exit");
+                Console.WriteLine("3). Take out a book");
+                Console.WriteLine("4). View Books You Have");
+                Console.WriteLine("5). Exit");
                 Console.WriteLine();
 
                 answer = Console.ReadLine();
 
-                switch (answer)
+                if (answer == "1" || string.Equals(answer, "Check", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Check Inventory", StringComparison.OrdinalIgnoreCase))
                 {
-                    // different cases to select inventory check
-                    case "1": InventoryCheck(); break;
-                    case "inventory": InventoryCheck(); break;
-                    case "Inventory": InventoryCheck(); break;
-                    case "Check": InventoryCheck(); break;
-                    case "check": InventoryCheck(); break;
-                    case "check inventory": InventoryCheck(); break;
+                    InventoryCheck();
+                }
 
-                    // different cases to select book entry
-                    case "2": BookEntry(); break;
-                    case "book entry": BookEntry(); break;
-                    case "Book Entry": BookEntry(); break;
-                    case "book": BookEntry(); break;
-                    case "Book": BookEntry(); break;
-                    case "entry": BookEntry(); break;
-                    case "Entry": BookEntry(); break;
+                if (answer == "2" || string.Equals(answer, "Book", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Book Entry", StringComparison.OrdinalIgnoreCase))
+                {
+                    BookEntry();
+                }
+
+                if (answer == "3" || string.Equals(answer, "Take", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Take Out", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Take Out a Book", StringComparison.OrdinalIgnoreCase))
+                {
+                    BookCheckout();
+                }
+
+                if (answer == "4" || string.Equals(answer, "View", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "View Books", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "View Books You Have", StringComparison.OrdinalIgnoreCase))
+                {
+                    ViewYourBooks();
+                }
+
+                if (answer == "5" || string.Equals(answer, "Exit", StringComparison.OrdinalIgnoreCase))
+                {
+                    state = false;
                 }
 
                 Console.Clear();
@@ -124,21 +129,45 @@ namespace Library_App
                     if (answer2 == "1" || string.Equals(answer2, "Book", StringComparison.OrdinalIgnoreCase) || string.Equals(answer2, "Book Entry", StringComparison.OrdinalIgnoreCase))
                     {
                         string titleAnswer;
-                        string categoryAnswer;
+                        string categoryAnswer = "";
                         int pageAnswer = 1905113515;
+                        string[] categoryNames = {"Action", "Adventure", "Horror", "Comedy", "Romance", "Science-Fiction" };
 
+                        Console.Clear();
                         Console.WriteLine();
                         Console.Write("What is the title of your book?: ");
                         titleAnswer = Console.ReadLine();
                         Console.WriteLine(titleAnswer);
                         
-                        // implement a list of categories that can only be chosen from
-
-                        Console.WriteLine();
-                        Console.Write("What is the Genre of your book?: ");
-                        categoryAnswer = Console.ReadLine();
                         Console.WriteLine();
 
+                        while (state1)
+                        {
+                            Console.Clear();
+                            Console.Write("The Available Categories are: ");
+
+                            foreach (string names in categoryNames)
+                            {
+                                Console.Write(names + " ");
+                            }
+                            Console.WriteLine() ;
+                            Console.Write("What is the Genre of your book?: ");
+                            categoryAnswer = Console.ReadLine();
+
+                            if (!categoryNames.Contains(categoryAnswer))
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Invalid Answer, please select from the available categories.");
+                            }
+                            else
+                            {
+                                state1 = false;
+                            }
+
+                            Console.ReadLine();
+                        }
+                        state1 = true;
+                        
                         while (state1)
                         {
                             Console.Write("How many pages does your book have?: ");
@@ -195,7 +224,16 @@ namespace Library_App
 
             void BookCheckout()
             {
+                Console.Clear();
+                Console.WriteLine("This Section is Under Construction");
+                Console.ReadLine();
+            }
 
+            void ViewYourBooks()
+            {
+                Console.Clear(); 
+                Console.WriteLine("This Section is Under Construction");
+                Console.ReadLine();
             }
         }
     }
