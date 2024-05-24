@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.Pipes;
 using System.Linq.Expressions;
 
 namespace Library_App
@@ -10,8 +11,13 @@ namespace Library_App
             bool state = true;
             string answer;
             int answerNum;
-            int bookCount = 3;
 
+            // books checked out by the user
+            int checkedOutBooksCount;
+            int[] checkedOutBooks = new int[3];
+            
+            // keeping track of the books being added and adding 3 books by default
+            int bookCount = 3;
             Book book1 = new Book("Test1", "Action", 243, false);
             Book book2 = new Book("Test2", "Adventure", 523, false);
             Book book3 = new Book("Test3", "Comedy", 103, false);
@@ -32,6 +38,7 @@ namespace Library_App
 
                 answer = Console.ReadLine();
 
+                // handling user inputs
                 if (answer == "1" || string.Equals(answer, "Check", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Check Inventory", StringComparison.OrdinalIgnoreCase))
                 {
                     InventoryCheck();
@@ -211,7 +218,7 @@ namespace Library_App
                         Console.Clear();
                     }
 
-                    if (answer2 == "2" || string.Equals(answer2, "Back", StringComparison.OrdinalIgnoreCase))
+                    if (answer2 == "2" || string.Equals(answer2, "Back", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Back to Main Menu", StringComparison.OrdinalIgnoreCase))
                     {
                         state = false;
                         Console.WriteLine("Sending you back to the Main Menu. Press Enter to Continue.");
@@ -224,8 +231,48 @@ namespace Library_App
 
             void BookCheckout()
             {
-                Console.Clear();
-                Console.WriteLine("This Section is Under Construction");
+                string answer = "";
+                bool state = true;
+                bool state1 = true;
+
+                while (state)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Please select an option.");
+                    Console.WriteLine("1). Check out a Book");
+                    Console.WriteLine("2). Back to Main Menu");
+                    Console.WriteLine();
+
+                    answer = Console.ReadLine();
+
+                    if (answer == "1" || string.Equals(answer, "Check", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Check out", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Check out a Book", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Check out book", StringComparison.OrdinalIgnoreCase))
+                    {
+
+                        while (state1)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Which Book Would you like to Checkout?");
+                            foreach (Book book in books)
+                            {
+                                Console.WriteLine($"Title: {book.title}");
+                                Console.WriteLine($"Category: {book.category}");
+                                Console.WriteLine($"Page Count: {book.pageCount}");
+                                Console.WriteLine(book.CheckedOutStatus());
+                                Console.WriteLine();
+                            }
+                        }
+                    }
+                    else if (answer == "2" || string.Equals(answer, "Back", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Back to Main Menu", StringComparison.OrdinalIgnoreCase))
+                    {
+
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Invalid Entry. Try Again");
+                    }
+                }
+
                 Console.ReadLine();
             }
 
