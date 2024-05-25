@@ -232,6 +232,7 @@ namespace Library_App
             void BookCheckout()
             {
                 string answer = "";
+                int answer1 = -1;
                 bool state = true;
                 bool state1 = true;
 
@@ -239,6 +240,7 @@ namespace Library_App
                 {
                     Console.Clear();
                     Console.WriteLine("Please select an option.");
+                    Console.WriteLine("(You can only Check out 3 books per person)");
                     Console.WriteLine("1). Check out a Book");
                     Console.WriteLine("2). Back to Main Menu");
                     Console.WriteLine();
@@ -252,19 +254,42 @@ namespace Library_App
                         {
                             Console.Clear();
                             Console.WriteLine("Which Book Would you like to Checkout?");
+                            Console.WriteLine("(Please Enter the Book Number to Select the Book)");
                             foreach (Book book in books)
                             {
+                                int count = 0;
                                 Console.WriteLine($"Title: {book.title}");
                                 Console.WriteLine($"Category: {book.category}");
                                 Console.WriteLine($"Page Count: {book.pageCount}");
+                                Console.WriteLine($"Book Number: {count}");
                                 Console.WriteLine(book.CheckedOutStatus());
                                 Console.WriteLine();
                             }
+
+                            Console.ReadLine();
+                            answer = Console.ReadLine();
+                            
+                            try 
+                            {
+                                answer1 = Convert.ToInt32(answer);
+                            } catch (Exception e)
+                            {
+                                Console.WriteLine("Invalid Answer, please try again.");
+                            }
+
+                            if (answer1 != -1)
+                            {
+                                books[answer1].isItCheckedOut = true;
+                                Console.WriteLine("Book Has Been Successfully Checked Out.");
+                            }
+
+                            Console.ReadLine();
                         }
                     }
                     else if (answer == "2" || string.Equals(answer, "Back", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Back to Main Menu", StringComparison.OrdinalIgnoreCase))
                     {
-
+                        Console.Clear();
+                        Console.WriteLine("Sending you back to the Main Menu");
                     }
                     else
                     {
