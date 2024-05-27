@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Pipes;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Library_App
 {
@@ -13,14 +14,14 @@ namespace Library_App
             int answerNum;
 
             // books checked out by the user
-            int checkedOutBooksCount;
+            int checkedOutBooksCount = 0;
             int[] checkedOutBooks = new int[3];
             
             // keeping track of the books being added and adding 3 books by default
             int bookCount = 3;
-            Book book1 = new Book("Test1", "Action", 243, false);
-            Book book2 = new Book("Test2", "Adventure", 523, false);
-            Book book3 = new Book("Test3", "Comedy", 103, false);
+            Book book1 = new Book("Test1", "Action", 243, 1, false);
+            Book book2 = new Book("Test2", "Adventure", 523, 2, false);
+            Book book3 = new Book("Test3", "Comedy", 103, 3, false);
 
             List<Book> books = new List<Book>{ book1, book2, book3 };
 
@@ -92,6 +93,7 @@ namespace Library_App
                             Console.WriteLine($"Title: {book.title}");
                             Console.WriteLine($"Category: {book.category}");
                             Console.WriteLine($"Page Count: {book.pageCount}");
+                            Console.WriteLine($"Book Index: {book.bookIndex}");
                             Console.WriteLine(book.CheckedOutStatus());
                             Console.WriteLine();
                         }
@@ -135,23 +137,36 @@ namespace Library_App
 
                     if (answer2 == "1" || string.Equals(answer2, "Book", StringComparison.OrdinalIgnoreCase) || string.Equals(answer2, "Book Entry", StringComparison.OrdinalIgnoreCase))
                     {
-                        string titleAnswer;
+                        string titleAnswer = "";
                         string categoryAnswer = "";
                         int pageAnswer = 1905113515;
                         string[] categoryNames = {"Action", "Adventure", "Horror", "Comedy", "Romance", "Science-Fiction" };
 
-                        Console.Clear();
-                        Console.WriteLine();
-                        Console.Write("What is the title of your book?: ");
-                        titleAnswer = Console.ReadLine();
-                        Console.WriteLine(titleAnswer);
-                        
+                        while (state1)
+                        {
+                            Console.Clear();
+                            Console.Write("What is the title of your book?: ");
+                            titleAnswer = Console.ReadLine();
+                            if (titleAnswer.Length < 1)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("A Valid Name Cannot Be Zero Characters. Please Try Again");
+                                Console.ReadLine();
+                            }
+                            else
+                            {
+                                state1 = false;
+                            }
+
+                        }
+                        state1 = true;
+
                         Console.WriteLine();
 
                         while (state1)
                         {
                             Console.Clear();
-                            Console.Write("The Available Categories are: ");
+                            Console.Write("The Available Genres to Choose From are: ");
 
                             foreach (string names in categoryNames)
                             {
@@ -170,8 +185,6 @@ namespace Library_App
                             {
                                 state1 = false;
                             }
-
-                            Console.ReadLine();
                         }
                         state1 = true;
                         
@@ -208,8 +221,10 @@ namespace Library_App
                         }
                         state1 = true;
 
+                        Console.Clear();
+                        Console.WriteLine("A new Book has been Created.");
                         bookCount++;
-                        Book nBook = new Book(titleAnswer, categoryAnswer, pageAnswer, false);
+                        Book nBook = new Book(titleAnswer, categoryAnswer, pageAnswer, bookCount, false);
                         books.Add(nBook);
                     }
                     else
@@ -235,6 +250,7 @@ namespace Library_App
                 int answer1 = -1;
                 bool state = true;
                 bool state1 = true;
+                bool validAns;
 
                 while (state)
                 {
@@ -254,42 +270,63 @@ namespace Library_App
                         {
                             Console.Clear();
                             Console.WriteLine("Which Book Would you like to Checkout?");
-                            Console.WriteLine("(Please Enter the Book Number to Select the Book)");
+                            Console.WriteLine("(Please Enter the Book Index to Select the Book)");
+                            Console.WriteLine();
+
                             foreach (Book book in books)
                             {
-                                int count = 0;
                                 Console.WriteLine($"Title: {book.title}");
                                 Console.WriteLine($"Category: {book.category}");
                                 Console.WriteLine($"Page Count: {book.pageCount}");
-                                Console.WriteLine($"Book Number: {count}");
+                                Console.WriteLine($"Book Index: {book.bookIndex}");
                                 Console.WriteLine(book.CheckedOutStatus());
                                 Console.WriteLine();
                             }
 
-                            Console.ReadLine();
+                            Console.WriteLine();
+                            Console.WriteLine("Please Type 'Back' to return to the Menu");
+
                             answer = Console.ReadLine();
-                            
-                            try 
+
+                            if (answer == "Back" || answer == "back")
+                            {
+                                break;
+                            }
+
+                            try
                             {
                                 answer1 = Convert.ToInt32(answer);
+                                validAns = true;
                             } catch (Exception e)
                             {
                                 Console.WriteLine("Invalid Answer, please try again.");
+                                validAns = false;
                             }
 
-                            if (answer1 != -1)
+                            if (answer1 != -1 && answer1 > 0 && books[answer1 - 1].isItCheckedOut == false && checkedOutBooksCount != 3 && validAns == true)
                             {
-                                books[answer1].isItCheckedOut = true;
+                                books[answer1 - 1].isItCheckedOut = true;
+                                checkedOutBooks.Append(answer1 - 1); 
                                 Console.WriteLine("Book Has Been Successfully Checked Out.");
+                            }
+                            else if (validAns == true && checkedOutBooksCount == 3)
+                            {
+                                Console.WriteLine("You Have Checked Out Your Maximum Number of Books.");
+                            }
+                            else if (validAns == true)
+                            {
+                                Console.WriteLine("That Book is Already Checked Out. Please Select Another One or Exit.");
                             }
 
                             Console.ReadLine();
                         }
+                        state1 = true;
                     }
                     else if (answer == "2" || string.Equals(answer, "Back", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Back to Main Menu", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.Clear();
                         Console.WriteLine("Sending you back to the Main Menu");
+                        state = false;
                     }
                     else
                     {
@@ -303,6 +340,7 @@ namespace Library_App
 
             void ViewYourBooks()
             {
+                // need a view and a return feature
                 Console.Clear(); 
                 Console.WriteLine("This Section is Under Construction");
                 Console.ReadLine();

@@ -11,14 +11,16 @@ namespace Library_App
         public string title;
         public string category;
         public int pageCount;
+        public int bookIndex;
         public bool isItCheckedOut;
         
-        public Book(string atitle, string acategory, int apageCount, bool aisItCheckedOut)
+        public Book(string atitle, string acategory, int apageCount, int abookIndex, bool aisItCheckedOut)
         {
             title = atitle;
             category = acategory;
             pageCount = apageCount;
             isItCheckedOut = aisItCheckedOut;
+            bookIndex = abookIndex;
         }
 
         public string CheckedOutStatus()
