@@ -17,7 +17,7 @@ namespace Library_App
 
             // books checked out by the user
             int checkedOutBooksCount = 0;
-            List<Book> checkedOutBooks = new List<Book> { };
+            List<int> checkedOutBooks = new List<int> { };
             
             // keeping track of the books being added and adding 3 books by default
             int bookCount = 3;
@@ -327,7 +327,7 @@ namespace Library_App
                             if (validAns == true && books[answer1 - 1].isItCheckedOut == false && checkedOutBooksCount != 3)
                             {
                                 books[answer1 - 1].isItCheckedOut = true;
-                                checkedOutBooks.Add(books[answer1 - 1]);
+                                checkedOutBooks.Add(answer1 - 1);
                                 checkedOutBooksCount++;
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("Book Has Been Successfully Checked Out.");
@@ -389,12 +389,12 @@ namespace Library_App
                         }
                         else
                         {
-                            foreach (Book book in checkedOutBooks)
+                            foreach (int index in checkedOutBooks)
                             {
-                                Console.WriteLine($"Title: {book.title}");
-                                Console.WriteLine($"Category: {book.category}");
-                                Console.WriteLine($"Page Count: {book.pageCount}");
-                                Console.WriteLine($"Book Index: {book.bookIndex}");
+                                Console.WriteLine($"Title: {books[index].title}");
+                                Console.WriteLine($"Category: {books[index].category}");
+                                Console.WriteLine($"Page Count: {books[index].pageCount}");
+                                Console.WriteLine($"Book Index: {books[index].bookIndex}");
                                 Console.WriteLine();
                             }
 
@@ -422,18 +422,21 @@ namespace Library_App
 
                                 Console.Clear();
                                 Console.WriteLine("Please Select One Of Your Books to Return");
-                                Console.WriteLine("(Please Enter The Book Index to Select)");
+                                Console.WriteLine("(Please Enter The List Index to Select)");
 
-                                foreach (Book book in checkedOutBooks)
+                                checkedOutBooks.Sort();
+
+                                foreach (int index in checkedOutBooks)
                                 {
                                     Console.WriteLine();
-                                    Console.WriteLine($"Title: {book.title}");
-                                    Console.WriteLine($"Category: {book.category}");
-                                    Console.WriteLine($"Page Count: {book.pageCount}");
-                                    Console.WriteLine($"Book Index: {book.bookIndex}");
+                                    Console.WriteLine($"Title: {books[index].title}");
+                                    Console.WriteLine($"Category: {books[index].category}");
+                                    Console.WriteLine($"Page Count: {books[index].pageCount}");
+                                    Console.WriteLine($"List Index: {index}");
                                     Console.WriteLine();
                                 }
                                 Console.WriteLine("Please Type 'Back' to return to the Menu");
+                                Console.WriteLine();
 
                                 answer = Console.ReadLine();
 
@@ -455,17 +458,24 @@ namespace Library_App
                                     validAns = false;
                                     Console.ReadLine();
                                 }
-
+                                
                                 // an if-else chain to deal with the answers
-                                if (validAns == true && checkedOutBooks.Contains(checkedOutBooks[answer1 - 1]))
+                                if (validAns == true && checkedOutBooks.Contains(answer1))
                                 {
                                     checkedOutBooks.Remove(checkedOutBooks[answer1 - 1]);
                                     checkedOutBooksCount--;
+                                    books[answer1].isItCheckedOut = false;
                                     Console.ForegroundColor = ConsoleColor.Green;
                                     Console.WriteLine("Book Has Been Successfully Returned.");
                                     Console.ReadLine();
                                 }
-                                
+                                else if (validAns == true)
+                                {
+                                    Console.WriteLine("That List Index Does Not Exist. Try Again");
+                                    Console.ReadLine();
+                                }
+
+                                // if there are no more books, return the user to the menu
                                 if (checkedOutBooks.Count == 0)
                                 {
                                     Console.ResetColor();
