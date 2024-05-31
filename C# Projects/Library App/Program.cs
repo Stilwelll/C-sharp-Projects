@@ -88,7 +88,7 @@ namespace Library_App
 
                     answer1 = Console.ReadLine();
 
-                    if (string.Equals(answer1, "Look at Books in Storage", StringComparison.OrdinalIgnoreCase) || string.Equals(answer1, "Look at Books", StringComparison.OrdinalIgnoreCase) || string.Equals(answer1, "Look", StringComparison.OrdinalIgnoreCase) || answer1 == "1")
+                    if (answer1 == "1" || string.Equals(answer1, "Look at Books in Storage", StringComparison.OrdinalIgnoreCase) || string.Equals(answer1, "Look at Books", StringComparison.OrdinalIgnoreCase) || string.Equals(answer1, "Look", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.Clear();
 
@@ -152,7 +152,6 @@ namespace Library_App
                             titleAnswer = Console.ReadLine();
                             if (titleAnswer.Length < 1)
                             {
-                                Console.Clear();
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("A Valid Name Cannot Be Zero Characters. Please Try Again");
                                 Console.ReadLine();
@@ -381,10 +380,6 @@ namespace Library_App
 
                     if (answer == "1" || string.Equals(answer, "Look", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Look at", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Look at Books", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Look at your Books", StringComparison.OrdinalIgnoreCase))
                     {
-                        Console.Clear();
-
-                        bool validAns;
-
                         checkedOutBooks.Sort();
 
                         if (checkedOutBooksCount == 0)
@@ -394,24 +389,94 @@ namespace Library_App
                         }
                         else
                         {
-                            // broken. please fix in the next update.
                             foreach (Book book in checkedOutBooks)
                             {
                                 Console.WriteLine($"Title: {book.title}");
                                 Console.WriteLine($"Category: {book.category}");
                                 Console.WriteLine($"Page Count: {book.pageCount}");
                                 Console.WriteLine($"Book Index: {book.bookIndex}");
+                                Console.WriteLine();
                             }
 
                             Console.WriteLine("Press Enter to go back.");
-                            Console.Clear();
                         }
 
                         Console.ReadLine();
                     }
                     else if (answer == "2" || string.Equals(answer, "Return", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Return a Book", StringComparison.OrdinalIgnoreCase))
                     {
+                        if (checkedOutBooksCount == 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("You Do Not Have Any Books Checked Out.");
+                            Console.ReadLine();
+                        }
+                        else
+                        {
+                            state1 = true;
 
+                            while (state1)
+                            {
+                                int answer1 = -1;
+                                bool validAns;
+
+                                Console.Clear();
+                                Console.WriteLine("Please Select One Of Your Books to Return");
+                                Console.WriteLine("(Please Enter The Book Index to Select)");
+
+                                foreach (Book book in checkedOutBooks)
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine($"Title: {book.title}");
+                                    Console.WriteLine($"Category: {book.category}");
+                                    Console.WriteLine($"Page Count: {book.pageCount}");
+                                    Console.WriteLine($"Book Index: {book.bookIndex}");
+                                    Console.WriteLine();
+                                }
+                                Console.WriteLine("Please Type 'Back' to return to the Menu");
+
+                                answer = Console.ReadLine();
+
+                                if (string.Equals(answer, "Back", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    break;
+                                }
+
+                                // trying to convert to an integer
+                                try
+                                {
+                                    answer1 = Convert.ToInt32(answer);
+                                    validAns = true;
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Invalid Answer, please try again.");
+                                    validAns = false;
+                                    Console.ReadLine();
+                                }
+
+                                // an if-else chain to deal with the answers
+                                if (validAns == true && checkedOutBooks.Contains(checkedOutBooks[answer1 - 1]))
+                                {
+                                    checkedOutBooks.Remove(checkedOutBooks[answer1 - 1]);
+                                    checkedOutBooksCount--;
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("Book Has Been Successfully Returned.");
+                                    Console.ReadLine();
+                                }
+                                
+                                if (checkedOutBooks.Count == 0)
+                                {
+                                    Console.ResetColor();
+                                    Console.WriteLine("There Are No More Books Left. Returning You To The Menu");
+                                    Console.ReadLine();
+                                    state1 = false;
+                                }
+
+                                Console.ResetColor();
+                            }
+                        }
                     }
                     else if (answer == "3" || string.Equals(answer, "Back", StringComparison.OrdinalIgnoreCase) || string.Equals(answer, "Back to Main Menu", StringComparison.OrdinalIgnoreCase))
                     {
